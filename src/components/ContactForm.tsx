@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -26,18 +27,57 @@ const ContactForm = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      // Configuration Airtable - Remplacez ces valeurs par les vôtres
+      const AIRTABLE_BASE_ID = "YOUR_BASE_ID"; // Remplacez par votre Base ID
+      const AIRTABLE_TABLE_NAME = "FormSubmissions"; // Nom de votre table
+      const AIRTABLE_API_KEY = "YOUR_API_KEY"; // Remplacez par votre API Key
+      
+      const airtableData = {
+        fields: {
+          "Nom": formData.name,
+          "Email": formData.email,
+          "Téléphone": formData.phone,
+          "Budget": formData.budget,
+          "Genres musicaux": formData.genres,
+          "Dates": formData.dates,
+          "Destination": formData.destination,
+          "Nombre de personnes": formData.groupSize,
+          "Message": formData.message,
+          "Date de soumission": new Date().toISOString()
+        }
+      };
+
+      await axios.post(
+        `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}`,
+        airtableData,
+        {
+          headers: {
+            "Authorization": `Bearer ${AIRTABLE_API_KEY}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
       toast({
         title: "Demande envoyée avec succès !",
         description: "Notre IA analyse déjà vos préférences. Nous vous recontactons sous 24h.",
       });
+      
       setFormData({
         name: "", email: "", phone: "", budget: "", genres: "", 
         dates: "", destination: "", groupSize: "", message: ""
       });
-    }, 2000);
+    } catch (error) {
+      console.error("Erreur lors de l'envoi vers Airtable:", error);
+      toast({
+        title: "Erreur lors de l'envoi",
+        description: "Une erreur est survenue. Veuillez réessayer.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
