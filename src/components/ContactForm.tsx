@@ -29,9 +29,9 @@ const ContactForm = () => {
     
     try {
       // Configuration Airtable - Remplacez ces valeurs par les vôtres
-      const AIRTABLE_BASE_ID = "appzsjZNpZCaDqE6f"; // Remplacez par votre Base ID
-      const AIRTABLE_TABLE_NAME = "GrooveNomad Festival Travel App"; // Nom de votre table
-      const AIRTABLE_API_KEY = "patph2tziwjeDgPJf.1c41f701de27c3fbd3bd254548d9a72027ca388124aaa8862bc174840f024c91"; // Remplacez par votre API Key
+      const AIRTABLE_BASE_ID = "YOUR_BASE_ID"; // Remplacez par votre Base ID
+      const AIRTABLE_TABLE_NAME = "YOUR_TABLE_NAME"; // Nom de votre table
+      const AIRTABLE_API_KEY = "YOUR_API_KEY"; // Remplacez par votre API Key
       
       const airtableData = {
         fields: {
